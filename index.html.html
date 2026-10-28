@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#b5122b">
+    <title>DOA+ | Doe sangue, compartilhe vida</title>
+
+    <style>
+        :root {
+            --vermelho:#b5122b;
+            --vermelho-escuro:#8f0d21;
+            --rosa-fundo:#fff5f5;
+            --rosa-claro:#fff0f1;
+            --texto:#333;
+            --texto-suave:#777;
+            --borda:#f0dce0;
+            --verde:#27845b;
+            --amarelo:#c58b17;
+            --critico:#c93643;
+            --branco:#fff;
+        }
+
+        * { box-sizing:border-box; }
+
+        body {
+            margin:0;
+            font-family:Arial,sans-serif;
+            background:var(--rosa-fundo);
+            color:var(--texto);
+        }
+
+        button,input,select { font:inherit; }
+        button,a { -webkit-tap-highlight-color:transparent; }
+        button { cursor:pointer; }
+        a { color:var(--vermelho); }
+        .oculto { display:none !important; }
+
+        .botao {
+            display:inline-flex;
+            justify-content:center;
+            align-items:center;
+            gap:8px;
+            padding:12px 18px;
+            border:0;
+            border-radius:10px;
+            background:var(--vermelho);
+            color:var(--branco);
+            text-decoration:none;
+            font-weight:bold;
+            transition:background .2s,transform .2s;
+        }
+
+        .botao:hover { background:var(--vermelho-escuro); }
+        .botao:active { transform:scale(.98); }
+
+        .botao-secundario {
+            background:var(--branco);
+            color:var(--vermelho);
+            border:1px solid var(--borda);
+        }
+
+        .botao-secundario:hover { background:var(--rosa-claro); }
+
+        .login {
+            width:100%;
+            max-width:440px;
+            margin:40px auto;
+            padding:32px 24px;
+            border-radius:18px;
+            background:var(--branco);
+            box-shadow:0 8px 25px rgba(181,18,43,.10);
+        }
+
+        .login h2 { margin-bottom:8px; color:var(--vermelho); }
+        .login p { line-height:1.6; }
+        .coracao { font-size:58px; text-align:center; }
+
+        .login form {
+            display:flex;
+            flex-direction:column;
+            gap:9px;
+            margin-top:24px;
+            text-align:left;
+        }
+
+        .login label { font-weight:bold; }
+
+        .login input,
+        .login select {
+            width:100%;
+            padding:13px;
+            margin-bottom:8px;
+            border:1px solid #e0bfc5;
+            border-radius:10px;
+            background:var(--branco);
+            color:var(--texto);
+        }
+
+        .login input:focus,
+        .login select:focus {
+            outline:2px solid var(--vermelho);
+            outline-offset:1px;
+        }
+
+        .login .botao { width:100%; }
+
+        .aviso-demo {
+            padding:10px;
+            border-radius:8px;
+            background:var(--rosa-claro);
+            color:var(--vermelho-escuro);
+            font-size:12px;
+            line-height:1.5;
+        }
+
+        .mensagem {
+            padding:12px;
+            margin-top:12px;
+            border-radius:9px;
+            background:var(--rosa-claro);
+            color:var(--vermelho-escuro);
+            font-size:14px;
+            line-height:1.5;
+        }
+
+        footer {
+            padding:24px 16px;
+            color:var(--texto-suave);
+            text-align:center;
+            font-size:13px;
+        }
+
+        /* Cabeçalho e Home */
+
+        .topbar {
+            position:sticky;
+            top:0;
+            z-index:20;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:16px;
+            padding:15px 5%;
+            background:var(--branco);
+            border-bottom:1px solid var(--borda);
+        }
+
+        .marca {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            color:var(--vermelho);
+            font-size:24px;
+            font-weight:800;
+            text-decoration:none;
+        }
+
+        .marca-icone {
+            display:grid;
+            place-items:center;
+            width:42px;
+            height:42px;
+            border-radius:13px;
+            background:var(--rosa-claro);
+            font-size:23px;
+        }
+
+        .topbar-direita { display:flex; align-items:center; gap:12px; }
+
+        .usuario {
+            font-size:14px;
+            font-weight:bold;
+        }
+
+        .menu-botao {
+            display:grid;
+            place-items:center;
+            width:43px;
+            height:43px;
+            border:1px solid var(--borda);
+            border-radius:12px;
+            background:var(--branco);
+            color:var(--vermelho);
+            font-size:25px;
+        }
+
+        .layout {
+            max-width:1200px;
+            margin:0 auto;
+            padding:30px 24px 50px;
+        }
+
+        .boas-vindas { margin-bottom:25px; }
+        .boas-vindas h1 { margin:0 0 8px; font-size:clamp(25px,4vw,34px); }
+        .boas-vindas p { margin:0; color:var(--texto-suave); line-height:1.6; }
+        .secao { margin-top:32px; }
+
+        .secao-cabecalho {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:15px;
+        }
+
+        .secao-cabecalho h2 { margin:0; font-size:22px; }
+        .subtitulo { margin:6px 0 0; color:var(--texto-suave); font-size:14px; line-height:1.5; }
+
+        .cartao {
+            overflow:hidden;
+            border:1px solid var(--borda);
+            border-radius:17px;
+            background:var(--branco);
+            box-shadow:0 5px 18px rgba(90,20,35,.04);
+        }
+
+        /* Campanha em destaque */
+
+        .campanha {
+            position:relative;
+            overflow:hidden;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+            min-height:245px;
+            padding:30px;
+            border-radius:20px;
+            background:linear-gradient(120deg,#b5122b,#8f0d21);
+            color:var(--branco);
+        }
+
+        .campanha-conteudo { position:relative; z-index:1; max-width:590px; }
+
+        .etiqueta {
+            display:inline-block;
+            padding:7px 11px;
+            border:1px solid rgba(255,255,255,.35);
+            border-radius:20px;
+            background:rgba(255,255,255,.12);
+            font-size:11px;
+            font-weight:bold;
+            letter-spacing:.8px;
+        }
+
+        .campanha h2 {
+            margin:17px 0 10px;
+            color:var(--branco);
+            font-size:clamp(27px,4vw,38px);
+            line-height:1.15;
+        }
+
+        .campanha p { margin:0; color:#ffe8ec; line-height:1.7; }
+
+        .campanha .botao {
+            margin-top:20px;
+            background:var(--branco);
+            color:var(--vermelho);
+        }
+
+        .campanha .botao:hover { background:var(--rosa-claro); }
+
+        .campanha-ilustracao {
+            flex-shrink:0;
+            display:grid;
+            place-items:center;
+            width:145px;
+            height:145px;
+            border-radius:50%;
+            background:rgba(255,255,255,.12);
+            font-size:80px;
+        }
+
+        /* Estoque de sangue */
+
+        .estoque-cartao { padding:22px; }
+        .legenda { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:20px; }
+
+        .legenda-item {
+            display:inline-flex;
+            align-items:center;
+            gap:7px;
+            color:#555;
+            font-size:12px;
+        }
+
+        .ponto { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+        .verde { background:var(--verde); }
+        .amarelo { background:var(--amarelo); }
+        .vermelho { background:var(--critico); }
+
+        .estoque-grade {
+            display:grid;
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:12px;
+        }
+
+        .tipo-sangue {
+            padding:15px;
+            border:1px solid var(--borda);
+            border-radius:13px;
+            background:#fffdfd;
+        }
+
+        .tipo-topo {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:8px;
+            margin-bottom:13px;
+        }
+
+        .tipo-topo strong { font-size:22px; }
+
+        .tipo-status {
+            display:flex;
+            align-items:center;
+            gap:6px;
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .barra-fundo {
+            overflow:hidden;
+            height:7px;
+            border-radius:10px;
+            background:#f0e8e9;
+        }
+
+        .barra { height:100%; border-radius:inherit; }
+        .barra-estavel { width:75%; background:var(--verde); }
+        .barra-critica { width:17%; background:var(--critico); }
+
+        .estoque-nota {
+            margin:17px 0 0;
+            color:var(--texto-suave);
+            font-size:12px;
+            line-height:1.6;
+        }
+
+        /* Notícias */
+
+        .noticia-imagem {
+            display:grid;
+            place-items:center;
+            min-height:145px;
+            padding:20px;
+            background:linear-gradient(135deg,#fde4e8,#fff4f5);
+            color:var(--vermelho);
+            font-size:55px;
+        }
+
+        .noticia-conteudo { padding:22px; }
+        .noticia-data { color:var(--texto-suave); font-size:12px; }
+        .noticia-conteudo h3 { margin:12px 0; font-size:20px; line-height:1.45; }
+        .noticia-conteudo p { color:#666; font-size:14px; line-height:1.7; }
+
+        .noticias-lista { display:grid; gap:16px; }
+        .noticias-extras { display:grid; gap:16px; margin-top:16px; }
+        .noticias-extras.oculto { display:none !important; }
+        #botaoMaisNoticias { min-width:240px; }
+
+        .link-acao {
+            display:inline-block;
+            margin-top:8px;
+            font-size:14px;
+            font-weight:bold;
+            text-decoration:none;
+        }
+
+        .link-acao:hover { text-decoration:underline; }
+
+        /* Quem somos */
+
+        .quem-somos {
+            display:grid;
+            grid-template-columns:105px 1fr;
+            align-items:center;
+            gap:22px;
+            padding:25px;
+        }
+
+        .quem-somos-icone {
+            display:grid;
+            place-items:center;
+            width:105px;
+            height:105px;
+            border-radius:20px;
+            background:var(--rosa-claro);
+            font-size:49px;
+        }
+
+        .quem-somos h3 { margin:0 0 10px; color:var(--vermelho); font-size:21px; }
+        .quem-somos p { margin:0 0 18px; color:#555; line-height:1.8; }
+
+        /* Serviços */
+
+        .servicos-grade {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:15px;
+        }
+
+        .servico {
+            display:flex;
+            align-items:center;
+            gap:16px;
+            padding:22px;
+            color:var(--texto);
+            text-decoration:none;
+            transition:transform .2s,box-shadow .2s;
+        }
+
+        .servico:hover {
+            transform:translateY(-3px);
+            box-shadow:0 8px 22px rgba(181,18,43,.09);
+        }
+
+        .servico-icone {
+            display:grid;
+            place-items:center;
+            flex-shrink:0;
+            width:55px;
+            height:55px;
+            border-radius:15px;
+            background:var(--rosa-claro);
+            font-size:27px;
+        }
+
+        .servico h3 { margin:0 0 7px; font-size:16px; }
+        .servico p { margin:0; color:var(--texto-suave); font-size:13px; line-height:1.5; }
+        .servico-seta { margin-left:auto; color:var(--vermelho); font-size:23px; }
+
+        /* Páginas internas */
+
+        .pagina-interna {
+            max-width:900px;
+            min-height:55vh;
+            margin:0 auto;
+            padding:30px 24px 50px;
+        }
+
+        .voltar { margin-bottom:22px; }
+
+        .pagina-cartao { padding:clamp(22px,5vw,42px); }
+
+        .pagina-cartao h1 {
+            margin-top:0;
+            color:var(--vermelho);
+            font-size:clamp(25px,4vw,34px);
+            line-height:1.3;
+        }
+
+        .pagina-cartao h2 { margin-top:30px; color:var(--vermelho); }
+        .pagina-cartao p { line-height:1.9; }
+
+        .historia-texto p {
+            margin:0 0 20px;
+            line-height:1.9;
+            text-align:left;
+        }
+
+        /* Campos do perfil */
+
+        .perfil-grade {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:8px 18px;
+        }
+
+        .pagina-cartao label {
+            display:block;
+            margin:12px 0 7px;
+            font-weight:bold;
+        }
+
+        .pagina-cartao input,
+        .pagina-cartao select {
+            width:100%;
+            padding:13px;
+            margin-bottom:8px;
+            border:1px solid #e0bfc5;
+            border-radius:10px;
+            background:var(--branco);
+            color:var(--texto);
+        }
+
+        .pagina-cartao input:focus,
+        .pagina-cartao select:focus {
+            outline:2px solid var(--vermelho);
+            outline-offset:1px;
+        }
+
+        .pagina-cartao input[readonly] {
+            background:#f7f0f1;
+            color:var(--texto-suave);
+        }
+
+        .item-agendamento {
+            padding:16px;
+            margin:12px 0;
+            border:1px solid var(--borda);
+            border-radius:12px;
+            background:#fffdfd;
+        }
+        .item-agendamento p { margin:6px 0; line-height:1.6; }
+
+        .notificacoes-cabecalho {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:12px;
+        }
+        .notificacoes-cabecalho h1 { margin:0; }
+        .botao-marcar-lidas { padding:9px 12px; font-size:13px; white-space:nowrap; }
+        .secao-agendamentos-titulo { display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+        .contador-status { display:inline-flex; align-items:center; justify-content:center; min-width:25px; height:25px; padding:0 7px; border-radius:999px; font-size:13px; font-weight:700; }
+        .contador-futuro { background:#fff1c9; color:#875c00; }
+        .contador-concluido { background:#e0f5e8; color:#176b3a; }
+        .contador-cancelado { background:#fde5e8; color:#a51d32; }
+        @media (max-width:520px) {
+            .notificacoes-cabecalho { gap:8px; }
+            .notificacoes-cabecalho h1 { font-size:24px; }
+            .botao-marcar-lidas { padding:8px 9px; font-size:12px; }
+        }
+
+        /* LOCAIS DE DOAÇÃO */
+
+        .locais-lista {
+            display:grid;
+            gap:20px;
+            margin-top:25px;
+        }
+
+        .local-cartao {
+            display:grid;
+            grid-template-columns:180px minmax(0,1fr);
+            overflow:hidden;
+            border:1px solid var(--borda);
+            border-radius:17px;
+            background:var(--branco);
+            box-shadow:0 5px 18px rgba(90,20,35,.04);
+        }
+
+        .local-imagem {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:12px;
+            min-height:220px;
+            padding:20px;
+            background:linear-gradient(145deg,#fde4e8,#fff4f5);
+            color:var(--vermelho);
+            text-align:center;
+        }
+
+        .local-imagem-icone {
+            display:grid;
+            place-items:center;
+            width:85px;
+            height:85px;
+            border-radius:23px;
+            background:var(--branco);
+            box-shadow:0 5px 18px rgba(181,18,43,.09);
+            font-size:43px;
+        }
+
+        .local-imagem span:last-child {
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .local-conteudo {
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            padding:23px;
+        }
+
+        .local-conteudo h2 {
+            margin:0 0 9px;
+            color:var(--vermelho);
+            font-size:20px;
+            line-height:1.4;
+        }
+
+        .local-detalhe {
+            display:flex;
+            align-items:flex-start;
+            gap:9px;
+            margin:6px 0;
+            color:#555;
+            font-size:14px;
+            line-height:1.6;
+        }
+
+        .local-detalhe-icone {
+            flex-shrink:0;
+            width:20px;
+            text-align:center;
+        }
+
+        .local-botoes {
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-top:17px;
+        }
+
+        .local-botoes .botao {
+            padding:11px 14px;
+            font-size:13px;
+        }
+
+        .local-botoes .botao-secundario {
+            border-color:var(--vermelho);
+        }
+
+        @media (max-width:600px) {
+            .local-cartao {
+                grid-template-columns:1fr;
+            }
+
+            .local-imagem {
+                min-height:125px;
+                flex-direction:row;
+                justify-content:flex-start;
+                padding:18px 22px;
+            }
+
+            .local-imagem-icone {
+                width:65px;
+                height:65px;
+                border-radius:18px;
+                font-size:34px;
+            }
+
+            .local-conteudo { padding:20px; }
+
+            .local-botoes {
+                width:100%;
+            }
+
+            .local-botoes .botao {
+                flex:1 1 145px;
+            }
+        }
+
+        /* Menu lateral */
+
+        .fundo-menu {
+            position:fixed;
+            inset:0;
+            z-index:29;
+            background:rgba(35,12,18,.38);
+        }
+
+        .menu-lateral {
+            position:fixed;
+            top:0;
+            right:0;
+            z-index:30;
+            width:min(330px,88vw);
+            height:100vh;
+            height:100dvh;
+            padding:23px;
+            overflow-y:auto;
+            background:var(--branco);
+            box-shadow:-8px 0 30px rgba(0,0,0,.12);
+            transform:translateX(105%);
+            visibility:hidden;
+            transition:transform .25s,visibility .25s;
+        }
+
+        .menu-lateral.aberto { transform:translateX(0); visibility:visible; }
+
+        .menu-topo {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            padding-bottom:20px;
+            border-bottom:1px solid var(--borda);
+        }
+
+        .menu-topo h2 { margin:0; color:var(--vermelho); }
+
+        .fechar-menu {
+            width:38px;
+            height:38px;
+            border:0;
+            border-radius:10px;
+            background:var(--rosa-claro);
+            color:var(--vermelho);
+            font-size:22px;
+        }
+
+        .menu-perfil { padding:20px 0; border-bottom:1px solid var(--borda); }
+        .menu-perfil strong { display:block; margin-bottom:5px; }
+        .menu-perfil span { color:var(--texto-suave); font-size:13px; }
+        .menu-links { display:grid; gap:7px; padding-top:18px; }
+
+        .menu-links button {
+            display:flex;
+            align-items:center;
+            gap:13px;
+            width:100%;
+            padding:14px 12px;
+            border:0;
+            border-radius:11px;
+            background:transparent;
+            color:var(--texto);
+            text-align:left;
+        }
+
+        .menu-links button:hover { background:var(--rosa-claro); color:var(--vermelho); }
+        .menu-icone { width:25px; text-align:center; font-size:19px; }
+        .menu-sair { margin-top:15px; border-top:1px solid var(--borda) !important; padding-top:15px !important; }
+
+        @media (max-width:760px) {
+            .layout { padding:23px 16px 35px; }
+            .estoque-grade { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .campanha { min-height:auto; padding:24px; }
+            .campanha-ilustracao { width:95px; height:95px; font-size:54px; }
+            .quem-somos { grid-template-columns:1fr; }
+            .quem-somos-icone { width:76px; height:76px; font-size:37px; }
+        }
+
+        @media (max-width:520px) {
+            .perfil-grade { grid-template-columns:1fr; }
+        }
+
+        @media (max-width:480px) {
+            .login { margin:20px auto; padding:27px 20px; }
+            .topbar { padding:12px 16px; }
+            .marca { font-size:21px; }
+            .usuario { max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+            .campanha { padding:22px 19px; }
+            .campanha-ilustracao { display:none; }
+            .campanha h2 { font-size:29px; }
+            .estoque-cartao { padding:15px; }
+            .tipo-sangue { padding:12px; }
+            .tipo-topo strong { font-size:20px; }
+            .secao-cabecalho h2 { font-size:20px; }
+            .servicos-grade { grid-template-columns:1fr; }
+            .servico { padding:18px; }
+        }
+
+        /* Conteúdo das configurações */
+        .configuracao-bloco {
+            padding:20px 0;
+            border-bottom:1px solid var(--borda);
+        }
+        .configuracao-bloco:last-child { border-bottom:0; }
+        .configuracao-bloco h2 { margin-top:0; }
+        .configuracao-bloco h3 { margin:20px 0 8px; font-size:16px; }
+        .configuracao-bloco p { margin:10px 0; }
+        .configuracao-bloco select {
+            width:100%;
+            max-width:100%;
+            padding:13px;
+            border:1px solid #e0bfc5;
+            border-radius:10px;
+            background:var(--branco);
+            color:var(--texto);
+        }
+        .configuracao-bloco select:disabled { opacity:.75; cursor:not-allowed; }
+        .saiba-mais-lgpd {
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            margin-top:18px;
+            padding:16px;
+            border:1px solid var(--borda);
+            border-radius:12px;
+            background:var(--rosa-claro);
+            overflow-wrap:anywhere;
+        }
+        .suporte-contato {
+            padding:13px 0;
+            border-bottom:1px solid var(--borda);
+        }
+        .suporte-contato:last-child { border-bottom:0; }
+        .suporte-contato h3 { margin:0 0 8px; color:var(--vermelho); }
+        .suporte-contato p { margin:5px 0; }
+
+        /* Tema escuro: altera somente as cores, preservando a estrutura visual. */
+        html[data-tema="escuro"] {
+            color-scheme:dark;
+            --rosa-fundo:#171316;
+            --rosa-claro:#302126;
+            --texto:#f4edf0;
+            --texto-suave:#c2b5ba;
+            --borda:#49343b;
+            --branco:#241e22;
+        }
+        html[data-tema="escuro"] body { background:var(--rosa-fundo); color:var(--texto); }
+        html[data-tema="escuro"] .login h2,
+        html[data-tema="escuro"] .pagina-cartao h1,
+        html[data-tema="escuro"] .pagina-cartao h2,
+        html[data-tema="escuro"] .quem-somos h3,
+        html[data-tema="escuro"] .local-conteudo h2,
+        html[data-tema="escuro"] .suporte-contato h3,
+        html[data-tema="escuro"] .menu-topo h2 { color:#ff9eae; }
+        html[data-tema="escuro"] a { color:#ff9eae; }
+        html[data-tema="escuro"] .botao-secundario {
+            background:#302126;
+            color:#ffb5c0;
+            border-color:#67404a;
+        }
+        html[data-tema="escuro"] .botao-secundario:hover,
+        html[data-tema="escuro"] .menu-links button:hover { background:#402832; }
+        html[data-tema="escuro"] .login,
+        html[data-tema="escuro"] .topbar,
+        html[data-tema="escuro"] .cartao,
+        html[data-tema="escuro"] .local-cartao,
+        html[data-tema="escuro"] .menu-lateral { background:var(--branco); }
+        html[data-tema="escuro"] .login input,
+        html[data-tema="escuro"] .login select,
+        html[data-tema="escuro"] .pagina-cartao input,
+        html[data-tema="escuro"] .pagina-cartao select,
+        html[data-tema="escuro"] .configuracao-bloco select {
+            background:#1b171a;
+            color:var(--texto);
+            border-color:#67404a;
+        }
+        html[data-tema="escuro"] .aviso-demo,
+        html[data-tema="escuro"] .mensagem,
+        html[data-tema="escuro"] .menu-icone,
+        html[data-tema="escuro"] .marca-icone,
+        html[data-tema="escuro"] .quem-somos-icone,
+        html[data-tema="escuro"] .servico-icone,
+        html[data-tema="escuro"] .fechar-menu,
+        html[data-tema="escuro"] .saiba-mais-lgpd {
+            background:#38232a;
+            color:#ffb5c0;
+        }
+        html[data-tema="escuro"] .aviso-demo,
+        html[data-tema="escuro"] .mensagem { color:#ffd5dc; }
+        html[data-tema="escuro"] .tipo-sangue,
+        html[data-tema="escuro"] .item-agendamento { background:#2d252a; }
+        html[data-tema="escuro"] .legenda-item,
+        html[data-tema="escuro"] .noticia-conteudo p,
+        html[data-tema="escuro"] .quem-somos p,
+        html[data-tema="escuro"] .local-detalhe { color:#d7cbd0; }
+        html[data-tema="escuro"] .barra-fundo { background:#493a40; }
+        html[data-tema="escuro"] .noticia-imagem,
+        html[data-tema="escuro"] .local-imagem {
+            background:linear-gradient(135deg,#39232a,#2c2025);
+            color:#ffb5c0;
+        }
+        html[data-tema="escuro"] .local-imagem-icone { background:#241e22; }
+        html[data-tema="escuro"] .pagina-cartao input[readonly] { background:#342b30; color:#c2b5ba; }
+        html[data-tema="escuro"] .contador-futuro { background:#493b20; color:#ffdb85; }
+        html[data-tema="escuro"] .contador-concluido { background:#203d30; color:#a9e8c2; }
+        html[data-tema="escuro"] .contador-cancelado { background:#4b252d; color:#ffc0c8; }
+        html[data-tema="escuro"] .campanha { color:#fff; }
+        html[data-tema="escuro"] .campanha h2 { color:#fff; }
+        html[data-tema="escuro"] .campanha .botao { color:var(--vermelho); }
+        html[data-tema="escuro"] .campanha p { color:#ffe8ec; }
+        html[data-tema="escuro"] .campanha .botao { background:#fff; }
+        @media (prefers-color-scheme: dark) {
+            html[data-tema="sistema"] {
+                color-scheme:dark;
+                --rosa-fundo:#171316;
+                --rosa-claro:#302126;
+                --texto:#f4edf0;
+                --texto-suave:#c2b5ba;
+                --borda:#49343b;
+                --branco:#241e22;
+            }
+            html[data-tema="sistema"] body { background:var(--rosa-fundo); color:var(--texto); }
+            html[data-tema="sistema"] .login h2,
+            html[data-tema="sistema"] .pagina-cartao h1,
+            html[data-tema="sistema"] .pagina-cartao h2,
+            html[data-tema="sistema"] .quem-somos h3,
+            html[data-tema="sistema"] .local-conteudo h2,
+            html[data-tema="sistema"] .suporte-contato h3,
+            html[data-tema="sistema"] .menu-topo h2 { color:#ff9eae; }
+            html[data-tema="sistema"] a { color:#ff9eae; }
+            html[data-tema="sistema"] .botao-secundario { background:#302126; color:#ffb5c0; border-color:#67404a; }
+            html[data-tema="sistema"] .botao-secundario:hover,
+            html[data-tema="sistema"] .menu-links button:hover { background:#402832; }
+            html[data-tema="sistema"] .login input,
+            html[data-tema="sistema"] .login select,
+            html[data-tema="sistema"] .pagina-cartao input,
+            html[data-tema="sistema"] .pagina-cartao select,
+            html[data-tema="sistema"] .configuracao-bloco select { background:#1b171a; color:var(--texto); border-color:#67404a; }
+            html[data-tema="sistema"] .aviso-demo,
+            html[data-tema="sistema"] .mensagem,
+            html[data-tema="sistema"] .marca-icone,
+            html[data-tema="sistema"] .quem-somos-icone,
+            html[data-tema="sistema"] .servico-icone,
+            html[data-tema="sistema"] .fechar-menu,
+            html[data-tema="sistema"] .saiba-mais-lgpd { background:#38232a; color:#ffb5c0; }
+            html[data-tema="sistema"] .aviso-demo,
+            html[data-tema="sistema"] .mensagem { color:#ffd5dc; }
+            html[data-tema="sistema"] .tipo-sangue,
+            html[data-tema="sistema"] .item-agendamento { background:#2d252a; }
+            html[data-tema="sistema"] .legenda-item,
+            html[data-tema="sistema"] .noticia-conteudo p,
+            html[data-tema="sistema"] .quem-somos p,
+            html[data-tema="sistema"] .local-detalhe { color:#d7cbd0; }
+            html[data-tema="sistema"] .barra-fundo { background:#493a40; }
+            html[data-tema="sistema"] .noticia-imagem,
+            html[data-tema="sistema"] .local-imagem { background:linear-gradient(135deg,#39232a,#2c2025); color:#ffb5c0; }
+            html[data-tema="sistema"] .local-imagem-icone { background:#241e22; }
+            html[data-tema="sistema"] .pagina-cartao input[readonly] { background:#342b30; color:#c2b5ba; }
+            html[data-tema="sistema"] .contador-futuro { background:#493b20; color:#ffdb85; }
+            html[data-tema="sistema"] .contador-concluido { background:#203d30; color:#a9e8c2; }
+            html[data-tema="sistema"] .contador-cancelado { background:#4b252d; color:#ffc0c8; }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <main id="telaLogin">
+        <section class="login" id="login">
+            <div class="coracao">❤️</div>
+            <h2>Bem-vindo ao DOA+</h2>
+            <p>Entre na sua conta para continuar.</p>
+
+            <p class="aviso-demo">
+                Esta é uma demonstração acadêmica. Utilize apenas dados fictícios.
+                Não informe senhas reais.
+            </p>
+
+            <form id="formLogin">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" name="cpf"
+                       placeholder="Digite seu CPF" autocomplete="off" required>
+
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha"
+                       placeholder="Digite sua senha" required>
+
+                <button type="submit" class="botao">Entrar</button>
+            </form>
+
+            <p>Ainda não tem conta?</p>
+            <button type="button" class="botao" onclick="mostrarCadastro()">
+                Criar conta
+            </button>
+
+            <div id="mensagemLogin" class="mensagem oculto" role="status"></div>
+        </section>
+
+        <!-- TELA DE CADASTRO -->
+        <section class="login oculto" id="cadastro">
+            <div class="coracao">❤️</div>
+            <h2>Criar minha conta</h2>
+            <p>Preencha os dados para se cadastrar no DOA+.</p>
+
+            <p class="aviso-demo">
+                Protótipo acadêmico: não utilize dados pessoais reais.
+                Os dados não são enviados a um servidor.
+            </p>
+
+            <form id="formCadastro">
+                <label for="nome">Nome completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome" required>
+
+                <label for="cpfCadastro">CPF</label>
+                <input type="text" id="cpfCadastro"
+                       placeholder="Digite seu CPF fictício"
+                       autocomplete="off" inputmode="numeric" required>
+
+                <label for="nascimento">Data de nascimento</label>
+                <input type="date" id="nascimento" required>
+
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone"
+                       placeholder="Digite seu telefone fictício" required>
+
+                <label for="email">E-mail</label>
+                <input type="email" id="email"
+                       placeholder="Digite seu e-mail fictício" required>
+
+                <label for="genero">Gênero</label>
+                <select id="genero" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Não binário">Não binário</option>
+                    <option value="Prefiro não informar">Prefiro não informar</option>
+                    <option value="Outro">Outro</option>
+                </select>
+
+                <label for="tipoSanguineo">Tipo sanguíneo (opcional)</label>
+                <select id="tipoSanguineo">
+                    <option value="">Não sei / Não quero informar</option>
+                    <option value="A+">A+</option>
+                    <option value="A−">A−</option>
+                    <option value="B+">B+</option>
+                    <option value="B−">B−</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB−">AB−</option>
+                    <option value="O+">O+</option>
+                    <option value="O−">O−</option>
+                </select>
+
+                <label for="senhaCadastro">Criar senha</label>
+                <input type="password" id="senhaCadastro"
+                       placeholder="Crie uma senha" minlength="8" required>
+
+                <label for="confirmarSenha">Confirmar senha</label>
+                <input type="password" id="confirmarSenha"
+                       placeholder="Digite a senha novamente" minlength="8" required>
+
+                <button type="submit" class="botao">Cadastrar</button>
+            </form>
+
+            <button type="button" class="botao botao-secundario"
+                    onclick="voltarLogin()">
+                Voltar para o login
+            </button>
+
+            <div id="mensagemCadastro" class="mensagem oculto" role="status"></div>
+        </section>
+    </main>
+
+    <!-- APLICAÇÃO -->
+    <div id="aplicacao" class="oculto">
+
+        <header class="topbar">
+            <a href="#" class="marca" onclick="mostrarPagina('home'); return false;">
+                <span class="marca-icone">❤️</span>
+                <span>DOA+</span>
+            </a>
+
+            <div class="topbar-direita">
+                <span class="usuario" id="nomeCabecalho">Olá!</span>
+                <button type="button" class="menu-botao"
+                        aria-label="Abrir menu" aria-expanded="false"
+                        onclick="alternarMenu()">⋯</button>
+            </div>
+        </header>
+
+        <!-- HOME -->
+        <main id="paginaHome" class="layout">
+
+            <section class="boas-vindas">
+                <h1 id="saudacao">Bem-vinda! 👋</h1>
+                <p>Um gesto de solidariedade pode fazer a diferença na vida de alguém.</p>
+            </section>
+
+            <!-- CAMPANHA -->
+            <section class="campanha">
+                <div class="campanha-conteudo">
+                    <span class="etiqueta">CAMPANHA EM DESTAQUE</span>
+                    <h2>Doe sangue, compartilhe esperança</h2>
+                    <p>Um gesto de solidariedade pode ajudar a salvar vidas.</p>
+                    <button class="botao" type="button"
+                            onclick="mostrarPagina('campanha')">
+                        Conheça a campanha →
+                    </button>
+                </div>
+                <div class="campanha-ilustracao" aria-hidden="true">🩸❤️</div>
+            </section>
+
+            <!-- ESTOQUE -->
+            <section class="secao" id="secaoEstoque">
+                <div class="secao-cabecalho">
+                    <div>
+                        <h2>Estoque de sangue</h2>
+                        <p class="subtitulo">Confira a situação demonstrativa dos tipos sanguíneos.</p>
+                    </div>
+                </div>
+
+                <div class="cartao estoque-cartao">
+                    <div class="legenda" aria-label="Legenda do estoque">
+                        <span class="legenda-item"><span class="ponto verde"></span> Estável</span>
+                        <span class="legenda-item"><span class="ponto amarelo"></span> Atenção</span>
+                        <span class="legenda-item"><span class="ponto vermelho"></span> Crítico</span>
+                    </div>
+
+                    <div class="estoque-grade">
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>A+</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>A−</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>B+</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>B−</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>AB+</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>AB−</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>O+</strong>
+                                <span class="tipo-status" style="color:var(--critico)"><span class="ponto vermelho"></span> Crítico</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-critica"></div></div>
+                        </article>
+
+                        <article class="tipo-sangue">
+                            <div class="tipo-topo">
+                                <strong>O−</strong>
+                                <span class="tipo-status" style="color:var(--verde)"><span class="ponto verde"></span> Estável</span>
+                            </div>
+                            <div class="barra-fundo"><div class="barra barra-estavel"></div></div>
+                        </article>
+                    </div>
+
+                    <p class="estoque-nota">
+                        <strong>Atualização informada:</strong> 22/10/2026 às 11:07.
+                        <br>
+                        Demonstração acadêmica. As barras são ilustrativas e não
+                        representam quantidades ou percentuais reais de bolsas.
+                        A situação não é atualizada automaticamente.
+                    </p>
+                </div>
+            </section>
+
+            <!-- NOTÍCIAS -->
+            <section class="secao" id="secaoNoticias">
+                <div class="secao-cabecalho">
+                    <div>
+                        <h2>Notícias e campanhas</h2>
+                        <p class="subtitulo">Informações sobre ações e iniciativas da HEMOBA.</p>
+                    </div>
+                </div>
+
+                <!-- A notícia mais recente aparece primeiro. As demais ficam recolhidas. -->
+                <div class="noticias-lista">
+                    <article class="cartao">
+                        <div class="noticia-imagem" aria-hidden="true">🩸❤️</div>
+                        <div class="noticia-conteudo">
+                            <span class="noticia-data">Publicado em 26/10/2026 às 16:07</span>
+                            <h3>Hemoba promove ação no Dia Nacional de Luta pelos Direitos das Pessoas com Doença Falciforme</h3>
+                            <p>
+                                Confira a publicação oficial da HEMOBA sobre a ação
+                                relacionada aos direitos das pessoas com doença falciforme.
+                            </p>
+                            <a class="link-acao"
+                               href="https://www.ba.gov.br/hemoba/noticias/2026-10/5856/hemoba-promove-acao-no-dia-nacional-de-luta-pelos-direitos-das-pessoas-com"
+                               target="_blank" rel="noopener noreferrer">
+                                Saiba mais no portal da HEMOBA ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <div id="noticiasExtras" class="noticias-extras oculto">
+                        <article class="cartao">
+                            <div class="noticia-imagem" aria-hidden="true">🎶❤️</div>
+                            <div class="noticia-conteudo">
+                                <span class="noticia-data">Publicado em 15/10/2026 às 14:46</span>
+                                <h3>Grupo Vocal Pentágono realiza apresentação em ação de incentivo à doação de sangue</h3>
+                                <p>
+                                    A iniciativa une música e solidariedade para sensibilizar a população
+                                    sobre a importância da doação voluntária de sangue.
+                                </p>
+                                <a class="link-acao" href="https://www.ba.gov.br/hemoba/"
+                                   target="_blank" rel="noopener noreferrer">
+                                    Saiba mais no portal da HEMOBA ↗
+                                </a>
+                            </div>
+                        </article>
+
+                        <article class="cartao">
+                            <div class="noticia-imagem" aria-hidden="true">🚐🩸</div>
+                            <div class="noticia-conteudo">
+                                <span class="noticia-data">Publicado em 05/10/2026 às 13:16</span>
+                                <h3>Hemoba leva Hemóvel a novos pontos para incentivar a doação de sangue</h3>
+                                <p>
+                                    A unidade móvel aproxima os serviços de coleta da população e facilita
+                                    o acesso de novos doadores às ações de solidariedade.
+                                </p>
+                                <a class="link-acao" href="https://www.ba.gov.br/hemoba/"
+                                   target="_blank" rel="noopener noreferrer">
+                                    Saiba mais no portal da HEMOBA ↗
+                                </a>
+                            </div>
+                        </article>
+
+                        <p style="text-align:center; margin:18px 0 0;">
+                            <a class="botao botao-secundario"
+                               href="https://www.ba.gov.br/hemoba/"
+                               target="_blank" rel="noopener noreferrer">
+                                Veja mais notícias como essa ↗
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin-top:18px;">
+                    <button type="button" id="botaoMaisNoticias" class="botao botao-secundario"
+                            aria-expanded="false" onclick="alternarNoticias()">
+                        Ver mais notícias como essa ↓
+                    </button>
+                </div>
+            </section>
+
+            <!-- QUEM SOMOS -->
+            <section class="secao">
+                <div class="secao-cabecalho">
+                    <div>
+                        <h2>Quem somos</h2>
+                        <p class="subtitulo">Conheça um pouco da história da HEMOBA.</p>
+                    </div>
+                </div>
+
+                <article class="cartao quem-somos">
+                    <div class="quem-somos-icone" aria-hidden="true">🏥</div>
+                    <div>
+                        <h3>Fundação de Hematologia e Hemoterapia da Bahia</h3>
+                        <p>Há décadas, a HEMOBA promove doação voluntária de sangue e apoia pacientes em todo estado da Bahia</p>
+                        <button class="botao" type="button" onclick="mostrarPagina('historia')">
+                            Conheça nossa história →
+                        </button>
+                    </div>
+                </article>
+            </section>
+
+            <!-- SERVIÇOS INTERNOS -->
+            <section class="secao">
+                <div class="secao-cabecalho">
+                    <div>
+                        <h2>Mais serviços</h2>
+                        <p class="subtitulo">Encontre informações para dar o próximo passo.</p>
+                    </div>
+                </div>
+
+                <div class="servicos-grade">
+                    <a href="#" onclick="mostrarPagina('locais'); return false;" class="cartao servico">
+                        <span class="servico-icone">📍</span>
+                        <span>
+                            <h3>Encontrar locais de doação</h3>
+                            <p>Consulte informações sobre os locais de doação.</p>
+                        </span>
+                        <span class="servico-seta">›</span>
+                    </a>
+
+                    <a href="#" onclick="mostrarPagina('agendar'); return false;" class="cartao servico">
+                        <span class="servico-icone">📅</span>
+                        <span>
+                            <h3>Agendar doação</h3>
+                            <p>Acesse a área demonstrativa de agendamentos.</p>
+                        </span>
+                        <span class="servico-seta">›</span>
+                    </a>
+                </div>
+
+                <p class="estoque-nota">
+                    Os serviços são demonstrativos. O protótipo não realiza agendamentos reais.
+                </p>
+            </section>
+        </main>
+
+        <!-- DETALHES DA CAMPANHA -->
+        <main id="paginaCampanha" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+
+            <article class="cartao pagina-cartao">
+                <span class="etiqueta" style="background:var(--rosa-claro);color:var(--vermelho);border-color:var(--borda)">
+                    CAMPANHA EM DESTAQUE
+                </span>
+                <h1 style="margin-top:20px">Doe sangue, compartilhe esperança</h1>
+                <p>
+                    Um gesto de solidariedade pode ajudar a salvar vidas.
+                    A doação voluntária de sangue é essencial para apoiar
+                    pessoas que precisam de transfusões e outros cuidados.
+                </p>
+                <p>Esta seção faz parte de um protótipo acadêmico e apresenta conteúdo demonstrativo.</p>
+                <a class="botao" href="https://www.ba.gov.br/hemoba/" target="_blank" rel="noopener noreferrer">
+                    Conheça a HEMOBA ↗
+                </a>
+            </article>
+        </main>
+
+        <!-- HISTÓRIA DA HEMOBA -->
+        <main id="paginaHistoria" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+
+            <article class="cartao pagina-cartao">
+                <h1>Nossa história</h1>
+                <p class="subtitulo">Fundação de Hematologia e Hemoterapia da Bahia — HEMOBA</p>
+
+                <div class="historia-texto">
+                    <p>Unidade do extinto ISEB - Instituto da Saúde do Estado da Bahia, surgiu como Centro de Hematologia e Hemoterapia da Bahia, iniciando suas atividades em janeiro de 1983.</p>
+
+                    <p>Em 1981 um grupo de técnicos do Ministério da Saúde, liderado pelo 1º Coordenador da Política Nacional de Sangue - Pró-Sangue, Profº Luís Gonzaga dos Santos, médico hematologista que fundou o 1º Hemocentro do Brasil em Pernambuco, juntamente com Norma Gouveia, pedagoga, e Antônio Brasileiro, arquiteto, identificaram dois médicos: Dr. Aurelino Santana, hematologista, na época prof. da UFBA e médico do Hospital Geral Roberto Santos (HGRS), e Dra. Maria Conceição Barbosa Coelho, chefe do Banco de Sangue do HGRS, para fazerem parte do grupo de trabalho com a finalidade de implantar o Hemocentro Coordenador do Estado da Bahia, unidade que seria executora da política de sangue no Estado.</p>
+
+                    <p>Unidade do extinto ISEB - Instituto da Saúde do Estado da Bahia, autarquia da SESAB - Secretaria da Saúde do Estado da Bahia, a HEMOBA surgiu como Centro de Hematologia e Hemoterapia da Bahia, iniciando suas atividades em janeiro de 1983, em uma área adaptada de 590m² do HGRS, no bairro do Cabula, cuja abrangência era suprir a demanda de sangue e hemocomponentes da rede pública, em Salvador e região metropolitana, sendo seu 1º Diretor Geral, o Dr. Aurelino Santana.</p>
+
+                    <p>Em 26 de julho de 1989, ainda sob a mesma direção, foi alterada a personalidade jurídica da instituição, criando-se a Fundação de Hematologia e Hemoterapia da Bahia – a HEMOBA com a finalidade de exercer as atividades de Hematologia e Hemoterapia em todo Estado da Bahia, inclusive o desenvolvimento do ensino e pesquisa, diretamente ou mediante convênios ou contratos com entidades federais, estaduais, municipais e entidades particulares de fins não lucrativos. Assim houve o crescimento de ações, universalizando, gradativamente, a assistência hematológica, a qualidade do sangue coletado e dos hemocomponentes transfundidos no Estado da Bahia.</p>
+
+                    <p>Em 15 de março 1993 passou a funcionar em sede própria na Av. Vasco da Gama, na Ladeira do Hospital Geral do Estado (HGE), numa área construída de aproximadamente 3.400m², que contempla espaço moderno e fluxo adequado para os doadores de sangue, com atendimento confortável e dentro das normas de biossegurança.</p>
+
+                    <p>A ocupação de vazios geográficos no Estado, no que concerne à hemoterapia, tem sido alvo das ações desta Fundação em sintonia com o Plano Diretor de Regionalização da Secretaria da Saúde. Nessa linha, estão em andamento a implantação de unidades hemoterápicas em diversas regiões do Estado e a modernização das instalações de unidades já existentes e que são hoje insuficientes para fazer frente à demanda crescente por hemocomponentes, conseqüência da instalação de novos hospitais e à elevação da complexidade da assistência à saúde na Bahia. Hoje, a HEMOBA possui 25 unidades espalhadas em todo o Estado.</p>
+                </div>
+
+                <a class="botao botao-secundario" href="https://www.ba.gov.br/hemoba/historico" target="_blank" rel="noopener noreferrer">
+                    Consultar histórico oficial ↗
+                </a>
+            </article>
+        </main>
+
+        <!-- PERFIL -->
+        <main id="paginaPerfil" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+
+            <article class="cartao pagina-cartao">
+                <h1>Meu perfil</h1>
+                <p>Consulte e atualize suas informações pessoais.</p>
+
+                <form id="formPerfil">
+                    <div class="perfil-grade">
+                        <div>
+                            <label for="perfilNomeInput">Nome completo</label>
+                            <input type="text" id="perfilNomeInput" required>
+                        </div>
+
+                        <div>
+                            <label for="perfilCpfInput">CPF</label>
+                            <input type="text" id="perfilCpfInput" readonly>
+                        </div>
+
+                        <div>
+                            <label for="perfilNascimento">Data de nascimento</label>
+                            <input type="date" id="perfilNascimento" required>
+                        </div>
+
+                        <div>
+                            <label for="perfilTelefone">Telefone</label>
+                            <input type="tel" id="perfilTelefone" required>
+                        </div>
+
+                        <div>
+                            <label for="perfilEmailInput">E-mail</label>
+                            <input type="email" id="perfilEmailInput" required>
+                        </div>
+
+                        <div>
+                            <label for="perfilGenero">Gênero</label>
+                            <select id="perfilGenero" required>
+                                <option value="">Selecione uma opção</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Não binário">Não binário</option>
+                                <option value="Prefiro não informar">Prefiro não informar</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="perfilTipoSanguineo">Tipo sanguíneo (opcional)</label>
+                            <select id="perfilTipoSanguineo">
+                                <option value="">Não sei / Não quero informar</option>
+                                <option value="A+">A+</option>
+                                <option value="A−">A−</option>
+                                <option value="B+">B+</option>
+                                <option value="B−">B−</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB−">AB−</option>
+                                <option value="O+">O+</option>
+                                <option value="O−">O−</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="botao">Salvar alterações</button>
+                </form>
+
+                <div id="mensagemPerfil" class="mensagem oculto" role="status"></div>
+
+                <p class="aviso-demo">
+                    Os dados são salvos localmente neste navegador e não são enviados a um servidor.
+                    Utilize apenas dados fictícios.
+                </p>
+            </article>
+        </main>
+
+        <!-- LOCAIS DE DOAÇÃO -->
+        <main id="paginaLocais" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">
+                ← Voltar para a Home
+            </button>
+
+            <article class="cartao pagina-cartao">
+                <h1>Locais de doação</h1>
+                <p class="subtitulo">
+                    Encontre a unidade de coleta mais próxima e agende sua doação.
+                </p>
+
+                <div class="locais-lista">
+
+                    <!-- UNIDADE 1 -->
+                    <article class="local-cartao">
+                        <div class="local-imagem" aria-label="Ilustração da unidade Hemocentro Coordenador">
+                            <div class="local-imagem-icone">🏥</div>
+                            <span>HEMOBA · BROTAS</span>
+                        </div>
+
+                        <div class="local-conteudo">
+                            <h2>HEMOBA — Hemocentro Coordenador</h2>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">📍</span>
+                                <span>Brotas — Salvador, BA</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">🕒</span>
+                                <span><strong>Segunda a sexta:</strong> 07h30 às 18h30</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">📅</span>
+                                <span><strong>Sábado:</strong> 07h30 às 16h30</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">☎️</span>
+                                <span><strong>Telefone:</strong> (71) 3194-7864</span>
+                            </p>
+
+                            <div class="local-botoes">
+                                <button type="button" class="botao"
+                                        onclick="mostrarPagina('agendar')">
+                                    📅 Agendar doação
+                                </button>
+
+                                <a class="botao botao-secundario"
+                                   href="https://maps.app.goo.gl/iVPDb3vWdRovqBrZ6"
+                                   target="_blank" rel="noopener noreferrer">
+                                    📍 Ver localização ↗
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- UNIDADE 2 -->
+                    <article class="local-cartao">
+                        <div class="local-imagem" aria-label="Ilustração da unidade Hospital do Subúrbio">
+                            <div class="local-imagem-icone">🏥</div>
+                            <span>HEMOBA · PERIPERI</span>
+                        </div>
+
+                        <div class="local-conteudo">
+                            <h2>HEMOBA — Hospital do Subúrbio</h2>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">📍</span>
+                                <span>Periperi — Salvador, BA</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">🕒</span>
+                                <span><strong>Segunda a sexta:</strong> 07h30 às 16h30</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">☎️</span>
+                                <span><strong>Telefone:</strong> (71) 3217-8824</span>
+                            </p>
+
+                            <div class="local-botoes">
+                                <button type="button" class="botao"
+                                        onclick="mostrarPagina('agendar')">
+                                    📅 Agendar doação
+                                </button>
+
+                                <a class="botao botao-secundario"
+                                   href="https://maps.app.goo.gl/WdN1yaJQv1zxto8v8?g_st=ac"
+                                   target="_blank" rel="noopener noreferrer">
+                                    📍 Ver localização ↗
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- UNIDADE 3 -->
+                    <article class="local-cartao">
+                        <div class="local-imagem" aria-label="Ilustração da unidade Ana Nery">
+                            <div class="local-imagem-icone">🏥</div>
+                            <span>HEMOBA · CAIXA D'ÁGUA</span>
+                        </div>
+
+                        <div class="local-conteudo">
+                            <h2>HEMOBA — Ana Nery</h2>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">📍</span>
+                                <span>Caixa D'Água — Salvador, BA</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">🕒</span>
+                                <span><strong>Terça a sexta:</strong> 07h30 às 12h30</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">☎️</span>
+                                <span><strong>Telefone:</strong> (71) 3117-1800</span>
+                            </p>
+
+                            <div class="local-botoes">
+                                <button type="button" class="botao"
+                                        onclick="mostrarPagina('agendar')">
+                                    📅 Agendar doação
+                                </button>
+
+                                <a class="botao botao-secundario"
+                                   href="https://maps.app.goo.gl/qCGRDGz3dnqkZLmZ9?g_st=ac"
+                                   target="_blank" rel="noopener noreferrer">
+                                    📍 Ver localização ↗
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- UNIDADE 4 -->
+                    <article class="local-cartao">
+                        <div class="local-imagem" aria-label="Ilustração da unidade Hospital Roberto Santos">
+                            <div class="local-imagem-icone">🏥</div>
+                            <span>HEMOBA · CABULA</span>
+                        </div>
+
+                        <div class="local-conteudo">
+                            <h2>HEMOBA — Hospital Roberto Santos</h2>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">📍</span>
+                                <span>Cabula — Salvador, BA</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">🕒</span>
+                                <span><strong>Segunda a sexta:</strong> 08h às 12h e 13h às 17h</span>
+                            </p>
+
+                            <p class="local-detalhe">
+                                <span class="local-detalhe-icone">☎️</span>
+                                <span><strong>Telefone:</strong> (71) 3116-5643</span>
+                            </p>
+
+                            <div class="local-botoes">
+                                <button type="button" class="botao"
+                                        onclick="mostrarPagina('agendar')">
+                                    📅 Agendar doação
+                                </button>
+
+                                <a class="botao botao-secundario"
+                                   href="https://maps.app.goo.gl/JBX54d1NjJ7n2Dta6?g_st=ac"
+                                   target="_blank" rel="noopener noreferrer">
+                                    📍 Ver localização ↗
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <p class="estoque-nota">
+                    Os horários e telefones foram informados para esta demonstração acadêmica.
+                    Confirme os dados e a disponibilidade de atendimento nos canais oficiais
+                    da HEMOBA antes de se deslocar.
+                </p>
+            </article>
+        </main>
+
+        <!-- AGENDAMENTOS -->
+        <main id="paginaAgendar" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+            <article class="cartao pagina-cartao">
+                <h1>Agendamento de doação</h1>
+                <p>Preencha os dados abaixo para registrar um agendamento demonstrativo.</p>
+                <p class="aviso-demo">Atenção: este formulário é apenas uma simulação acadêmica. Ele não agenda uma doação real junto à HEMOBA.</p>
+
+                <form id="formAgendamento">
+                    <label for="agendamentoUnidade">Unidade de doação</label>
+                    <select id="agendamentoUnidade" required>
+                        <option value="">Selecione uma unidade</option>
+                        <option value="HEMOBA — Hemocentro Coordenador (Brotas)">HEMOBA — Hemocentro Coordenador (Brotas)</option>
+                        <option value="HEMOBA — Hospital do Subúrbio (Periperi)">HEMOBA — Hospital do Subúrbio (Periperi)</option>
+                        <option value="HEMOBA — Ana Nery (Caixa D'Água)">HEMOBA — Ana Nery (Caixa D'Água)</option>
+                        <option value="HEMOBA — Hospital Roberto Santos (Cabula)">HEMOBA — Hospital Roberto Santos (Cabula)</option>
+                    </select>
+
+                    <label for="agendamentoData">Data pretendida</label>
+                    <input type="date" id="agendamentoData" required>
+
+                    <label for="agendamentoHorario">Horário pretendido</label>
+                    <select id="agendamentoHorario" required>
+                        <option value="">Selecione um horário</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                    </select>
+
+                    <button type="submit" class="botao">Salvar agendamento demonstrativo</button>
+                </form>
+
+                <div id="mensagemAgendamento" class="mensagem oculto" role="status"></div>
+                <a class="botao botao-secundario" href="https://www.ba.gov.br/hemoba/" target="_blank" rel="noopener noreferrer">Consultar canais oficiais ↗</a>
+            </article>
+        </main>
+
+        <!-- MEUS AGENDAMENTOS / HISTÓRICO -->
+        <main id="paginaAgendamentos" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+            <article class="cartao pagina-cartao">
+                <h1>Meus agendamentos</h1>
+                <p>Consulte aqui o histórico dos seus agendamentos demonstrativos.</p>
+                <div id="listaAgendamentos">
+                    <p class="subtitulo">Você ainda não registrou agendamentos nesta demonstração.</p>
+                </div>
+                <button type="button" class="botao" onclick="mostrarPagina('agendar')">📅 Agendar doação</button>
+            </article>
+        </main>
+
+        <!-- NOTIFICAÇÕES -->
+        <main id="paginaNotificacoes" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+            <article class="cartao pagina-cartao">
+                <div class="notificacoes-cabecalho">
+                    <h1>Notificações</h1>
+                    <button type="button" class="botao botao-secundario botao-marcar-lidas" onclick="marcarTodasComoLidas()">Marcar todas como lidas</button>
+                </div>
+                <p>Confira os avisos gerados pelas ações realizadas nesta demonstração.</p>
+                <div id="listaNotificacoes">
+                    <p class="subtitulo">Você não tem notificações no momento.</p>
+                </div>
+            </article>
+        </main>
+
+        <!-- CONFIGURAÇÕES -->
+        <main id="paginaConfiguracoes" class="pagina-interna oculto">
+            <button class="botao botao-secundario voltar" onclick="mostrarPagina('home')">← Voltar para a Home</button>
+            <article class="cartao pagina-cartao">
+                <h1>Configurações</h1>
+
+                <section class="configuracao-bloco">
+                    <h2>Idioma</h2>
+                    <label for="idiomaPreferido">Idioma do aplicativo</label>
+                    <select id="idiomaPreferido" disabled aria-describedby="idiomaAjuda">
+                        <option value="pt-BR" selected>Português</option>
+                    </select>
+                    <p id="idiomaAjuda" class="subtitulo">No momento, o DOA+ está disponível apenas em português.</p>
+                </section>
+
+                <section class="configuracao-bloco">
+                    <h2>Aparência</h2>
+                    <label for="temaPreferido">Tema do aplicativo</label>
+                    <select id="temaPreferido" onchange="alterarTema(this.value)">
+                        <option value="sistema">Padrão do sistema</option>
+                        <option value="claro">Modo claro</option>
+                        <option value="escuro">Modo escuro</option>
+                    </select>
+                    <p class="subtitulo">Sua preferência será salva neste navegador.</p>
+                </section>
+
+                <section class="configuracao-bloco">
+                    <h2>Privacidade e proteção de dados</h2>
+                    <p><strong>A sua privacidade importa!</strong></p>
+                    <p>A Lei Geral de Proteção de Dados Pessoais (LGPD), Lei nº 13.709/2018, estabelece regras para o tratamento de dados pessoais e busca proteger os direitos fundamentais de liberdade, privacidade e o livre desenvolvimento da personalidade.</p>
+                    <h3>Como a LGPD se aplica?</h3>
+                    <p>O tratamento de dados pessoais inclui atividades como coleta, utilização, armazenamento, compartilhamento e eliminação de informações. Essas operações devem observar as finalidades e as hipóteses legais aplicáveis, além dos princípios e das obrigações de transparência previstos na legislação.</p>
+                    <h3>Seus direitos</h3>
+                    <p>A LGPD estabelece direitos para os titulares dos dados, que devem ser respeitados durante o tratamento de suas informações. Entre as garantias previstas na lei estão mecanismos de transparência e meios para solicitar o exercício desses direitos.</p>
+                    <p><strong>Base legal:</strong> Lei nº 13.709/2018 — LGPD</p>
+                    <div class="saiba-mais-lgpd">
+                        <strong>Saiba mais</strong>
+                        <a href="https://www.gov.br/mds/pt-br/acesso-a-informacao/privacidade-e-protecao-de-dados/lgpd" target="_blank" rel="noopener noreferrer">https://www.gov.br/mds/pt-br/acesso-a-informacao/privacidade-e-protecao-de-dados/lgpd ↗</a>
+                    </div>
+                </section>
+
+                <section class="configuracao-bloco">
+                    <h2>Ajuda e suporte</h2>
+                    <div class="suporte-contato">
+                        <h3>Hemocentro Coordenador</h3>
+                        <p><a href="tel:+557131947864">(71) 3194-7864</a></p>
+                    </div>
+                    <div class="suporte-contato">
+                        <h3>Serviço de Atendimento ao Doador (SAD)</h3>
+                        <p><a href="tel:+557131947861">(71) 3194-7861</a></p>
+                        <p><a href="tel:+557131947862">(71) 3194-7862</a></p>
+                    </div>
+                    <div class="suporte-contato">
+                        <h3>Captação de Doadores</h3>
+                        <p><a href="tel:+557131947842">(71) 3194-7842</a></p>
+                        <p><a href="tel:+557131947843">(71) 3194-7843</a></p>
+                    </div>
+                    <div class="suporte-contato">
+                        <h3>Ouvidoria da HEMOBA</h3>
+                        <p><a href="mailto:ouvidoria.hemoba1@hemoba.ba.gov.br">ouvidoria.hemoba1@hemoba.ba.gov.br</a></p>
+                        <p class="subtitulo">Canal para manifestações, sugestões e reclamações.</p>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <footer>Projeto acadêmico DOA+ · Demonstração</footer>
+    </div>
+
+    <!-- MENU LATERAL -->
+    <div id="fundoMenu" class="fundo-menu oculto" onclick="fecharMenu()"></div>
+
+    <aside id="menuLateral" class="menu-lateral" aria-label="Menu principal" aria-hidden="true">
+        <div class="menu-topo">
+            <h2>Menu DOA+</h2>
+            <button class="fechar-menu" type="button" aria-label="Fechar menu" onclick="fecharMenu()">×</button>
+        </div>
+
+        <div class="menu-perfil">
+            <strong id="nomeMenu">Visitante</strong>
+            <span>Bem-vindo(a) ao DOA+</span>
+        </div>
+
+        <nav class="menu-links">
+            <button onclick="irPara('perfil')"><span class="menu-icone">👤</span> Meu perfil</button>
+            <button onclick="irPara('locais')"><span class="menu-icone">📍</span> Locais de doação</button>
+            <button onclick="irPara('agendamentos')"><span class="menu-icone">📅</span> Meus agendamentos</button>
+            <button onclick="irPara('notificacoes')"><span class="menu-icone">🔔</span> <span id="textoNotificacoesMenu">Notificações (0)</span></button>
+            <button onclick="irPara('configuracoes')"><span class="menu-icone">⚙️</span> Configurações</button>
+            <button class="menu-sair" onclick="sairDaConta()"><span class="menu-icone">↩️</span> Sair da conta</button>
+        </nav>
+    </aside>
+
+    <script>
+        /*
+         * DOA+ — demonstração acadêmica.
+         * As contas ficam salvas neste navegador, sem servidor.
+         * Utilize somente dados fictícios.
+         */
+
+        const CHAVE_USUARIOS = "doaPlusUsuariosDemo";
+        const CHAVE_SESSAO = "doaPlusSessaoDemo";
+
+        const CHAVE_TEMA = "doaPlusTemaPreferido";
+
+        function aplicarTema(tema) {
+            const temaValido = ["sistema", "claro", "escuro"].includes(tema) ? tema : "sistema";
+            document.documentElement.setAttribute("data-tema", temaValido);
+            const seletor = document.getElementById("temaPreferido");
+            if (seletor && seletor.value !== temaValido) seletor.value = temaValido;
+        }
+
+        function alterarTema(tema) {
+            const temaValido = ["sistema", "claro", "escuro"].includes(tema) ? tema : "sistema";
+            try {
+                localStorage.setItem(CHAVE_TEMA, temaValido);
+            } catch (erro) {
+                // O tema continua funcionando nesta sessão mesmo se o armazenamento falhar.
+            }
+            aplicarTema(temaValido);
+        }
+
+        function restaurarTema() {
+            let tema = "sistema";
+            try {
+                tema = localStorage.getItem(CHAVE_TEMA) || "sistema";
+            } catch (erro) {
+                // Mantém o padrão do sistema se o armazenamento não estiver disponível.
+            }
+            aplicarTema(tema);
+        }
+
+        let usuarioAtual = null;
+        let menuAberto = false;
+
+        const paginas = {
+            home: "paginaHome",
+            campanha: "paginaCampanha",
+            historia: "paginaHistoria",
+            perfil: "paginaPerfil",
+            locais: "paginaLocais",
+            agendar: "paginaAgendar",
+            agendamentos: "paginaAgendamentos",
+            notificacoes: "paginaNotificacoes",
+            configuracoes: "paginaConfiguracoes"
+        };
+
+        function alternarNoticias() {
+            const extras = document.getElementById("noticiasExtras");
+            const botao = document.getElementById("botaoMaisNoticias");
+            const vaiAbrir = extras.classList.contains("oculto");
+
+            extras.classList.toggle("oculto", !vaiAbrir);
+            botao.setAttribute("aria-expanded", String(vaiAbrir));
+            botao.textContent = vaiAbrir
+                ? "Mostrar menos notícias ↑"
+                : "Ver mais notícias como essa ↓";
+        }
+
+        function obterUsuarios() {
+            try {
+                const dados = localStorage.getItem(CHAVE_USUARIOS);
+                return dados ? JSON.parse(dados) : [];
+            } catch (erro) {
+                return [];
+            }
+        }
+
+        function salvarUsuarios(usuarios) {
+            try {
+                localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(usuarios));
+                return true;
+            } catch (erro) {
+                mostrarMensagem(
+                    "mensagemCadastro",
+                    "Não foi possível salvar os dados neste navegador. Verifique as configurações e tente novamente."
+                );
+                return false;
+            }
+        }
+
+        function normalizarCPF(cpf) {
+            return cpf.replace(/\D/g, "");
+        }
+
+        function normalizarNome(nome) {
+            return nome.trim().split(/\s+/)[0] || "Visitante";
+        }
+
+        function mostrarCadastro() {
+            document.getElementById("login").classList.add("oculto");
+            document.getElementById("cadastro").classList.remove("oculto");
+            limparMensagem("mensagemLogin");
+            limparMensagem("mensagemCadastro");
+            window.scrollTo(0, 0);
+        }
+
+        function voltarLogin() {
+            document.getElementById("cadastro").classList.add("oculto");
+            document.getElementById("login").classList.remove("oculto");
+            limparMensagem("mensagemCadastro");
+            window.scrollTo(0, 0);
+        }
+
+        function mostrarMensagem(id, texto) {
+            const elemento = document.getElementById(id);
+            elemento.textContent = texto;
+            elemento.classList.remove("oculto");
+        }
+
+        function limparMensagem(id) {
+            const elemento = document.getElementById(id);
+            elemento.textContent = "";
+            elemento.classList.add("oculto");
+        }
+
+        // CADASTRO DE USUÁRIO
+        document.getElementById("formCadastro").addEventListener("submit", function(evento) {
+            evento.preventDefault();
+            limparMensagem("mensagemCadastro");
+
+            const nome = document.getElementById("nome").value.trim();
+            const cpfDigitado = document.getElementById("cpfCadastro").value.trim();
+            const cpf = normalizarCPF(cpfDigitado);
+            const nascimento = document.getElementById("nascimento").value;
+            const telefone = document.getElementById("telefone").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const genero = document.getElementById("genero").value;
+            const tipoSanguineo = document.getElementById("tipoSanguineo").value;
+            const senha = document.getElementById("senhaCadastro").value;
+            const confirmar = document.getElementById("confirmarSenha").value;
+
+            if (!nome || !cpf || !nascimento || !telefone || !email || !genero) {
+                mostrarMensagem("mensagemCadastro", "Preencha todos os campos obrigatórios.");
+                return;
+            }
+
+            if (cpf.length !== 11) {
+                mostrarMensagem("mensagemCadastro", "Digite um CPF fictício com 11 números.");
+                return;
+            }
+
+            if (senha.length < 8) {
+                mostrarMensagem("mensagemCadastro", "A senha deve ter pelo menos 8 caracteres.");
+                return;
+            }
+
+            if (!/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/[^A-Za-z0-9]/.test(senha)) {
+                mostrarMensagem(
+                    "mensagemCadastro",
+                    "A senha precisa ter pelo menos uma letra maiúscula, uma minúscula e um caractere especial."
+                );
+                return;
+            }
+
+            // Impede que a senha contenha sequências de quatro números do CPF.
+            const senhaNumeros = normalizarCPF(senha);
+            for (let i = 0; i <= cpf.length - 4; i++) {
+                if (senhaNumeros.includes(cpf.slice(i, i + 4))) {
+                    mostrarMensagem("mensagemCadastro", "A senha não pode conter partes do CPF.");
+                    return;
+                }
+            }
+
+            if (senha !== confirmar) {
+                mostrarMensagem("mensagemCadastro", "As senhas não coincidem. Confira e tente novamente.");
+                return;
+            }
+
+            const usuarios = obterUsuarios();
+
+            if (usuarios.some(function(usuario) {
+                return normalizarCPF(usuario.cpf) === cpf;
+            })) {
+                mostrarMensagem("mensagemCadastro", "Já existe uma conta demonstrativa com esse CPF. Volte ao login.");
+                return;
+            }
+
+            const novaConta = {
+                nome: nome,
+                cpf: cpf,
+                nascimento: nascimento,
+                telefone: telefone,
+                email: email,
+                genero: genero,
+                tipoSanguineo: tipoSanguineo,
+                senha: senha,
+                agendamentos: [],
+                notificacoes: []
+            };
+
+            usuarios.push(novaConta);
+
+            if (!salvarUsuarios(usuarios)) {
+                return;
+            }
+
+            document.getElementById("formCadastro").reset();
+            document.getElementById("cpf").value = cpfDigitado;
+
+            voltarLogin();
+            mostrarMensagem(
+                "mensagemLogin",
+                "Cadastro demonstrativo concluído! Entre com o CPF e a senha que você cadastrou."
+            );
+        });
+
+        // LOGIN
+        document.getElementById("formLogin").addEventListener("submit", function(evento) {
+            evento.preventDefault();
+            limparMensagem("mensagemLogin");
+
+            const cpf = normalizarCPF(document.getElementById("cpf").value);
+            const senha = document.getElementById("senha").value;
+            const usuarios = obterUsuarios();
+
+            const conta = usuarios.find(function(usuario) {
+                return normalizarCPF(usuario.cpf) === cpf && usuario.senha === senha;
+            });
+
+            if (!conta) {
+                mostrarMensagem(
+                    "mensagemLogin",
+                    "CPF ou senha incorretos. Confira os dados ou crie uma conta demonstrativa."
+                );
+                return;
+            }
+
+            usuarioAtual = conta;
+            if (!Array.isArray(usuarioAtual.agendamentos)) usuarioAtual.agendamentos = [];
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+
+            try {
+                localStorage.setItem(CHAVE_SESSAO, usuarioAtual.cpf);
+            } catch (erro) {
+                // A conta continua utilizável nesta sessão.
+            }
+
+            abrirAplicacao();
+        });
+
+        // MOSTRA OS DADOS CADASTRADOS NO PERFIL E NAS OUTRAS ÁREAS
+        function atualizarDadosUsuario() {
+            if (!usuarioAtual) return;
+
+            const primeiroNome = normalizarNome(usuarioAtual.nome);
+
+            document.getElementById("saudacao").textContent =
+                "Bem-vinda, " + primeiroNome + "! 👋";
+
+            document.getElementById("nomeCabecalho").textContent =
+                "Olá, " + primeiroNome;
+
+            document.getElementById("nomeMenu").textContent = usuarioAtual.nome;
+
+            document.getElementById("perfilNomeInput").value =
+                usuarioAtual.nome || "";
+
+            document.getElementById("perfilCpfInput").value =
+                usuarioAtual.cpf || "";
+
+            document.getElementById("perfilNascimento").value =
+                usuarioAtual.nascimento || "";
+
+            document.getElementById("perfilTelefone").value =
+                usuarioAtual.telefone || "";
+
+            document.getElementById("perfilEmailInput").value =
+                usuarioAtual.email || "";
+
+            document.getElementById("perfilGenero").value =
+                usuarioAtual.genero || "";
+
+            document.getElementById("perfilTipoSanguineo").value =
+                usuarioAtual.tipoSanguineo || "";
+
+            garantirNotificacoesCampanhas();
+            sincronizarNotificacoesAgendamentos();
+            atualizarAgendamentos();
+            atualizarNotificacoes();
+        }
+
+        // SALVAR AS ALTERAÇÕES DE MEU PERFIL
+        document.getElementById("formPerfil").addEventListener("submit", function(evento) {
+            evento.preventDefault();
+            limparMensagem("mensagemPerfil");
+
+            if (!usuarioAtual) return;
+
+            const usuarios = obterUsuarios();
+
+            const indice = usuarios.findIndex(function(usuario) {
+                return normalizarCPF(usuario.cpf) === normalizarCPF(usuarioAtual.cpf);
+            });
+
+            if (indice === -1) {
+                mostrarMensagem(
+                    "mensagemPerfil",
+                    "Não foi possível localizar sua conta demonstrativa."
+                );
+                return;
+            }
+
+            usuarios[indice].nome =
+                document.getElementById("perfilNomeInput").value.trim();
+
+            usuarios[indice].nascimento =
+                document.getElementById("perfilNascimento").value;
+
+            usuarios[indice].telefone =
+                document.getElementById("perfilTelefone").value.trim();
+
+            usuarios[indice].email =
+                document.getElementById("perfilEmailInput").value.trim();
+
+            usuarios[indice].genero =
+                document.getElementById("perfilGenero").value;
+
+            usuarios[indice].tipoSanguineo =
+                document.getElementById("perfilTipoSanguineo").value;
+
+            if (!salvarUsuarios(usuarios)) return;
+
+            usuarioAtual = usuarios[indice];
+
+            atualizarDadosUsuario();
+
+            mostrarMensagem("mensagemPerfil", "Perfil atualizado com sucesso! ❤️");
+        });
+
+        // AGENDAMENTO DEMONSTRATIVO: histórico e notificações ficam salvos neste navegador.
+        document.getElementById("agendamentoData").min = new Date().toISOString().slice(0, 10);
+
+        document.getElementById("formAgendamento").addEventListener("submit", function(evento) {
+            evento.preventDefault();
+            limparMensagem("mensagemAgendamento");
+
+            if (!usuarioAtual) {
+                mostrarMensagem("mensagemAgendamento", "Entre na sua conta para salvar um agendamento demonstrativo.");
+                return;
+            }
+
+            const unidade = document.getElementById("agendamentoUnidade").value;
+            const data = document.getElementById("agendamentoData").value;
+            const horario = document.getElementById("agendamentoHorario").value;
+
+            if (!unidade || !data || !horario) {
+                mostrarMensagem("mensagemAgendamento", "Preencha a unidade, a data e o horário pretendidos.");
+                return;
+            }
+
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const dataEscolhida = new Date(data + "T00:00:00");
+            if (dataEscolhida < hoje) {
+                mostrarMensagem("mensagemAgendamento", "Escolha uma data de hoje em diante.");
+                return;
+            }
+
+            if (!Array.isArray(usuarioAtual.agendamentos)) usuarioAtual.agendamentos = [];
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+
+            const idAgendamento = Date.now();
+            usuarioAtual.agendamentos.push({
+                id: idAgendamento,
+                unidade: unidade,
+                data: data,
+                horario: horario,
+                status: "futuro",
+                criadoEm: new Date().toISOString()
+            });
+            registrarNotificacao(
+                "Agendamento demonstrativo registrado",
+                "Seu registro para " + unidade + " em " + formatarData(data) + " às " + horario + " foi salvo no DOA+. Este é um agendamento de demonstração e não foi enviado à HEMOBA.",
+                "agendamento",
+                idAgendamento
+            );
+
+            if (!persistirUsuarioAtual()) return;
+
+            document.getElementById("formAgendamento").reset();
+            document.getElementById("agendamentoData").min = new Date().toISOString().slice(0, 10);
+            atualizarAgendamentos();
+            atualizarNotificacoes();
+            // Depois de agendar, leva a pessoa à página Meus Agendamentos.
+            mostrarPagina("agendamentos");
+        });
+
+        function formatarData(dataISO) {
+            if (!dataISO) return "";
+            const partes = dataISO.split("-");
+            return partes.length === 3 ? partes[2] + "/" + partes[1] + "/" + partes[0] : dataISO;
+        }
+
+        function obterStatusAgendamento(item) {
+            if (item.status === "cancelado") return "cancelado";
+            if (item.status === "concluido") return "concluido";
+            const dataHora = new Date((item.data || "") + "T" + (item.horario || "00:00") + ":00");
+            if (!Number.isNaN(dataHora.getTime()) && dataHora < new Date()) return "concluido";
+            return "futuro";
+        }
+
+        function nomeUnidadeCurto(unidade) {
+            return String(unidade || "").replace("HEMOBA — ", "");
+        }
+
+        function linkLocalAgendamento(unidade) {
+            const locais = {
+                "HEMOBA — Hemocentro Coordenador (Brotas)": "https://maps.app.goo.gl/iVPDb3vWdRovqBrZ6",
+                "HEMOBA — Hospital do Subúrbio (Periperi)": "https://www.google.com/maps/search/?api=1&query=HEMOBA+Hospital+do+Suburbio+Salvador",
+                "HEMOBA — Ana Nery (Caixa D'Água)": "https://www.google.com/maps/search/?api=1&query=HEMOBA+Ana+Nery+Salvador",
+                "HEMOBA — Hospital Roberto Santos (Cabula)": "https://www.google.com/maps/search/?api=1&query=HEMOBA+Hospital+Roberto+Santos+Salvador"
+            };
+            return locais[unidade] || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(unidade || "HEMOBA Salvador");
+        }
+
+        function atualizarAgendamentos() {
+            const lista = document.getElementById("listaAgendamentos");
+            if (!lista) return;
+
+            const agendamentos = usuarioAtual && Array.isArray(usuarioAtual.agendamentos)
+                ? usuarioAtual.agendamentos.slice().sort(function(a, b) {
+                    return (a.data + a.horario).localeCompare(b.data + b.horario);
+                })
+                : [];
+
+            if (!agendamentos.length) {
+                lista.innerHTML = '<p class="subtitulo">Você ainda não registrou agendamentos nesta demonstração.</p>';
+                return;
+            }
+
+            const futuros = [];
+            const concluidos = [];
+            const cancelados = [];
+            agendamentos.forEach(function(item) {
+                const status = obterStatusAgendamento(item);
+                if (status === "cancelado") cancelados.push(item);
+                else if (status === "concluido") concluidos.push(item);
+                else futuros.push(item);
+            });
+
+            function cartaoAgendamento(item, status) {
+                const id = Number(item.id);
+                const idDetalhes = "detalhesAgendamento" + id;
+                const nomeUnidade = escaparHTML(item.unidade);
+                const dataFormatada = escaparHTML(formatarData(item.data));
+                const horario = escaparHTML(item.horario);
+
+                if (status === "cancelado") {
+                    return '<article class="item-agendamento">' +
+                        '<p><strong style="color:var(--vermelho, #b5122b)">✕ Agendamento cancelado</strong></p>' +
+                        '<strong>' + nomeUnidade + '</strong>' +
+                        '<p>📅 Data: ' + dataFormatada + '</p>' +
+                        '<p>🕒 Horário: ' + horario + '</p>' +
+                        '<p class="subtitulo">Este agendamento foi cancelado. O registro foi mantido no seu histórico.</p>' +
+                        '</article>';
+                }
+
+                const etiqueta = status === "concluido"
+                    ? '<p><strong style="color:var(--verde)">✓ Concluído</strong></p>'
+                    : '<p><strong style="color:var(--amarelo)">◷ Próximo agendamento</strong></p>';
+                const botoes = status === "futuro"
+                    ? '<div class="linha-botoes" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">' +
+                        '<button type="button" class="botao botao-secundario" onclick="alternarDetalhesAgendamento(' + id + ')">Ver detalhes</button>' +
+                        '<a class="botao botao-secundario" href="' + escaparHTML(linkLocalAgendamento(item.unidade)) + '" target="_blank" rel="noopener noreferrer">📍 Ver localização ↗</a>' +
+                        '<button type="button" class="botao botao-secundario" onclick="cancelarAgendamento(' + id + ')">Cancelar agendamento</button>' +
+                      '</div>'
+                    : '<div class="linha-botoes" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">' +
+                        '<button type="button" class="botao botao-secundario" onclick="alternarDetalhesAgendamento(' + id + ')">Ver detalhes</button>' +
+                      '</div>';
+
+                return '<article class="item-agendamento">' +
+                    etiqueta +
+                    '<strong>' + nomeUnidade + '</strong>' +
+                    '<p>📅 Data: ' + dataFormatada + '</p>' +
+                    '<p>🕒 Horário: ' + horario + '</p>' +
+                    '<div id="' + idDetalhes + '" class="oculto" style="margin-top:12px;padding:12px;border-radius:9px;background:var(--rosa-claro)">' +
+                        '<p><strong>Detalhes do registro</strong></p>' +
+                        '<p>Unidade: ' + nomeUnidade + '</p>' +
+                        '<p>Data pretendida: ' + dataFormatada + '</p>' +
+                        '<p>Horário pretendido: ' + horario + '</p>' +
+                        '<p class="subtitulo">Registro demonstrativo. Não representa confirmação de agendamento pela HEMOBA.</p>' +
+                    '</div>' + botoes +
+                    '</article>';
+            }
+
+            let html = '';
+            html += '<section class="secao"><div class="secao-agendamentos-titulo"><h2>Próximos agendamentos</h2><span class="contador-status contador-futuro">' + futuros.length + '</span></div>';
+            html += futuros.length ? futuros.map(function(item) { return cartaoAgendamento(item, "futuro"); }).join("") : '<p class="subtitulo">Você não tem próximos agendamentos.</p>';
+            html += '</section>';
+            html += '<section class="secao"><div class="secao-agendamentos-titulo"><h2>Concluídos</h2><span class="contador-status contador-concluido">' + concluidos.length + '</span></div>';
+            html += concluidos.length ? concluidos.map(function(item) { return cartaoAgendamento(item, "concluido"); }).join("") : '<p class="subtitulo">Nenhum agendamento concluído ainda.</p>';
+            html += '</section>';
+            html += '<section class="secao"><div class="secao-agendamentos-titulo"><h2>Cancelados</h2><span class="contador-status contador-cancelado">' + cancelados.length + '</span></div>';
+            html += cancelados.length ? cancelados.map(function(item) { return cartaoAgendamento(item, "cancelado"); }).join("") : '<p class="subtitulo">Nenhum agendamento cancelado.</p>';
+            html += '</section>';
+            lista.innerHTML = html;
+        }
+
+        function alternarDetalhesAgendamento(id) {
+            const detalhes = document.getElementById("detalhesAgendamento" + Number(id));
+            if (detalhes) detalhes.classList.toggle("oculto");
+        }
+
+        function garantirNotificacoesCampanhas() {
+            if (!usuarioAtual) return;
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+            const campanhas = [
+                {
+                    id: "doenca-falciforme-outubro-2026",
+                    titulo: "Notícia da HEMOBA: doença falciforme",
+                    mensagem: "A HEMOBA divulgou uma ação relacionada ao Dia Nacional de Luta pelos Direitos das Pessoas com Doença Falciforme. Consulte a notícia na seção Notícias e campanhas da Home.",
+                    data: "2026-10-26T16:07:00.000Z"
+                },
+                {
+                    id: "hemovel-outubro-2026",
+                    titulo: "Campanha de incentivo à doação de sangue",
+                    mensagem: "Confira na seção Notícias e campanhas as informações sobre ações de incentivo à doação de sangue e a atuação do Hemóvel.",
+                    data: "2026-10-05T13:16:00.000Z"
+                }
+            ];
+            let alterou = false;
+            campanhas.forEach(function(campanha) {
+                const existe = usuarioAtual.notificacoes.some(function(n) {
+                    return n.tipo === "campanha" && n.campanhaId === campanha.id;
+                });
+                if (!existe) {
+                    usuarioAtual.notificacoes.push({
+                        id: "campanha-" + campanha.id,
+                        campanhaId: campanha.id,
+                        tipo: "campanha",
+                        titulo: campanha.titulo,
+                        mensagem: campanha.mensagem,
+                        criadoEm: campanha.data,
+                        lida: false
+                    });
+                    alterou = true;
+                }
+            });
+            if (alterou) persistirUsuarioAtual();
+        }
+
+        function registrarNotificacao(titulo, mensagem, tipo, agendamentoId) {
+            if (!usuarioAtual) return;
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+            usuarioAtual.notificacoes.unshift({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                agendamentoId: agendamentoId || null,
+                tipo: tipo || "atualizacao",
+                titulo: titulo,
+                mensagem: mensagem,
+                criadoEm: new Date().toISOString(),
+                lida: false
+            });
+        }
+
+        function cancelarAgendamento(id) {
+            if (!usuarioAtual || !Array.isArray(usuarioAtual.agendamentos)) return;
+            const item = usuarioAtual.agendamentos.find(function(a) { return Number(a.id) === Number(id); });
+            if (!item || obterStatusAgendamento(item) !== "futuro") return;
+            item.status = "cancelado";
+            item.canceladoEm = new Date().toISOString();
+            registrarNotificacao(
+                "Agendamento cancelado",
+                "O agendamento de " + item.unidade + " previsto para " + formatarData(item.data) + " às " + item.horario + " foi cancelado no DOA+.",
+                "cancelamento",
+                item.id
+            );
+            if (!persistirUsuarioAtual()) return;
+            atualizarAgendamentos();
+            atualizarNotificacoes();
+        }
+
+
+        function escaparHTML(valor) {
+            return String(valor == null ? "" : valor).replace(/[&<>"']/g, function(caractere) {
+                return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[caractere];
+            });
+        }
+
+        function persistirUsuarioAtual() {
+            if (!usuarioAtual) return false;
+            const usuarios = obterUsuarios();
+            const indice = usuarios.findIndex(function(usuario) {
+                return normalizarCPF(usuario.cpf) === normalizarCPF(usuarioAtual.cpf);
+            });
+            if (indice === -1) return false;
+            usuarios[indice] = usuarioAtual;
+            return salvarUsuarios(usuarios);
+        }
+
+        function removerAgendamento(id) {
+            if (!usuarioAtual || !Array.isArray(usuarioAtual.agendamentos)) return;
+            usuarioAtual.agendamentos = usuarioAtual.agendamentos.filter(function(item) {
+                return Number(item.id) !== Number(id);
+            });
+            persistirUsuarioAtual();
+            atualizarAgendamentos();
+            atualizarNotificacoes();
+        }
+
+        function atualizarNotificacoes() {
+            if (!usuarioAtual) return;
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+
+            const notificacoes = usuarioAtual.notificacoes;
+            const naoLidas = notificacoes.filter(function(item) { return !item.lida; }).length;
+            const textoMenu = document.getElementById("textoNotificacoesMenu");
+            if (textoMenu) textoMenu.textContent = "Notificações (" + naoLidas + ")";
+
+            const lista = document.getElementById("listaNotificacoes");
+            if (!lista) return;
+
+            if (!notificacoes.length) {
+                lista.innerHTML = '<p class="subtitulo">Você não tem notificações no momento.</p>';
+                return;
+            }
+
+            lista.innerHTML = notificacoes.slice().sort(function(a, b) {
+                return new Date(b.criadoEm || 0) - new Date(a.criadoEm || 0);
+            }).map(function(item) {
+                return '<article class="item-agendamento">' +
+                    '<strong>' + (item.lida ? '✓ ' : '🔔 ') + escaparHTML(item.titulo || "Notificação do DOA+") + '</strong>' +
+                    '<p>' + escaparHTML(item.mensagem || "Você tem uma atualização no DOA+.") + '</p>' +
+                    '<p class="subtitulo">' + escaparHTML(item.criadoEm ? new Date(item.criadoEm).toLocaleString("pt-BR") : "") + '</p>' +
+                    '</article>';
+            }).join("");
+        }
+
+        function sincronizarNotificacoesAgendamentos() {
+            if (!usuarioAtual) return;
+            if (!Array.isArray(usuarioAtual.agendamentos)) usuarioAtual.agendamentos = [];
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+            let alterou = false;
+
+            usuarioAtual.agendamentos.forEach(function(item) {
+                const id = Number(item.id);
+                const status = obterStatusAgendamento(item);
+                const temRegistro = usuarioAtual.notificacoes.some(function(n) {
+                    return n.tipo === "agendamento" && (Number(n.agendamentoId) === id || Number(n.id) === id);
+                });
+                if (!temRegistro) {
+                    registrarNotificacao(
+                        "Agendamento demonstrativo registrado",
+                        "Seu registro para " + item.unidade + " em " + formatarData(item.data) + " às " + item.horario + " está salvo no histórico do DOA+.",
+                        "agendamento",
+                        id
+                    );
+                    alterou = true;
+                }
+
+                if (status === "cancelado") {
+                    const temCancelamento = usuarioAtual.notificacoes.some(function(n) {
+                        return n.tipo === "cancelamento" && Number(n.agendamentoId) === id;
+                    });
+                    if (!temCancelamento) {
+                        registrarNotificacao("Agendamento cancelado", "O agendamento de " + item.unidade + " previsto para " + formatarData(item.data) + " às " + item.horario + " foi cancelado no DOA+.", "cancelamento", id);
+                        alterou = true;
+                    }
+                } else if (status === "concluido") {
+                    const temConclusao = usuarioAtual.notificacoes.some(function(n) {
+                        return n.tipo === "conclusao" && Number(n.agendamentoId) === id;
+                    });
+                    if (!temConclusao) {
+                        registrarNotificacao("Agendamento concluído", "O registro de " + item.unidade + " em " + formatarData(item.data) + " às " + item.horario + " aparece como concluído no histórico do DOA+.", "conclusao", id);
+                        alterou = true;
+                    }
+                }
+            });
+
+            if (alterou) persistirUsuarioAtual();
+        }
+
+        function marcarTodasComoLidas() {
+            if (!usuarioAtual) return;
+            if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+            usuarioAtual.notificacoes.forEach(function(item) { item.lida = true; });
+            persistirUsuarioAtual();
+            atualizarNotificacoes();
+        }
+
+        function abrirAplicacao() {
+            document.getElementById("telaLogin").classList.add("oculto");
+            document.getElementById("aplicacao").classList.remove("oculto");
+
+            atualizarDadosUsuario();
+            mostrarPagina("home");
+        }
+
+        // NAVEGAÇÃO
+        function mostrarPagina(nomePagina) {
+            if (nomePagina === "configuracoes") {
+                const seletorTema = document.getElementById("temaPreferido");
+                if (seletorTema) {
+                    try {
+                        seletorTema.value = localStorage.getItem(CHAVE_TEMA) || "sistema";
+                    } catch (erro) {
+                        seletorTema.value = "sistema";
+                    }
+                }
+            }
+            if (nomePagina === "agendamentos") atualizarAgendamentos();
+            if (nomePagina === "notificacoes") atualizarNotificacoes();
+            Object.values(paginas).forEach(function(id) {
+                document.getElementById(id).classList.add("oculto");
+            });
+
+            const id = paginas[nomePagina] || paginas.home;
+            document.getElementById(id).classList.remove("oculto");
+
+            fecharMenu();
+            window.scrollTo({ top: 0, behavior: "auto" });
+        }
+
+        function irPara(nomePagina) {
+            // A navegação do menu sempre abre a página escolhida. A ida para
+            // Notificações após uma marcação acontece somente no envio do formulário.
+            mostrarPagina(nomePagina);
+        }
+
+        // MENU LATERAL
+        function alternarMenu() {
+            if (menuAberto) {
+                fecharMenu();
+                return;
+            }
+
+            menuAberto = true;
+
+            document.getElementById("menuLateral").classList.add("aberto");
+            document.getElementById("menuLateral").setAttribute("aria-hidden", "false");
+            document.getElementById("fundoMenu").classList.remove("oculto");
+            document.querySelector(".menu-botao").setAttribute("aria-expanded", "true");
+            document.body.style.overflow = "hidden";
+        }
+
+        function fecharMenu() {
+            menuAberto = false;
+
+            document.getElementById("menuLateral").classList.remove("aberto");
+            document.getElementById("menuLateral").setAttribute("aria-hidden", "true");
+            document.getElementById("fundoMenu").classList.add("oculto");
+            document.querySelector(".menu-botao").setAttribute("aria-expanded", "false");
+            document.body.style.overflow = "";
+        }
+
+        // SAIR DA CONTA SEM APAGAR O CADASTRO
+        function sairDaConta() {
+            fecharMenu();
+            usuarioAtual = null;
+
+            try {
+                localStorage.removeItem(CHAVE_SESSAO);
+            } catch (erro) {
+                // A saída continua mesmo se o armazenamento estiver indisponível.
+            }
+
+            document.getElementById("aplicacao").classList.add("oculto");
+            document.getElementById("telaLogin").classList.remove("oculto");
+            document.getElementById("cadastro").classList.add("oculto");
+            document.getElementById("login").classList.remove("oculto");
+            document.getElementById("formLogin").reset();
+
+            limparMensagem("mensagemLogin");
+            window.scrollTo(0, 0);
+        }
+
+        // RESTAURA A SESSÃO QUANDO A PÁGINA É REABERTA
+        function restaurarSessao() {
+            try {
+                const cpfSalvo = localStorage.getItem(CHAVE_SESSAO);
+                if (!cpfSalvo) return;
+
+                const conta = obterUsuarios().find(function(usuario) {
+                    return normalizarCPF(usuario.cpf) === normalizarCPF(cpfSalvo);
+                });
+
+                if (conta) {
+                    usuarioAtual = conta;
+                    if (!Array.isArray(usuarioAtual.agendamentos)) usuarioAtual.agendamentos = [];
+                    if (!Array.isArray(usuarioAtual.notificacoes)) usuarioAtual.notificacoes = [];
+                    abrirAplicacao();
+                } else {
+                    localStorage.removeItem(CHAVE_SESSAO);
+                }
+            } catch (erro) {
+                // Se o navegador bloquear o armazenamento, a página abre no login.
+            }
+        }
+
+        document.addEventListener("keydown", function(evento) {
+            if (evento.key === "Escape" && menuAberto) {
+                fecharMenu();
+            }
+        });
+
+        restaurarTema();
+        restaurarSessao();
+    </script>
+</body>
+</html>
